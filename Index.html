@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="Index.css">
+    <link rel="shortcut icon" href="Img/api.png" type="image/x-icon">
+    <title>API</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <a href="" class="logo"><span>H</span>eroes</a>
+        <ul class="navbar">
+        </ul>
+    </header>
+    <!-- Formulario -->
+    <form id="Heroes">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="nombrereal">Nombre real:</label>
+        <input type="text" id="apellido" name="apellido" required>
+
+        <label for="animacion">Estudio de animacion:</label>
+        <input type="text" id="email" name="email" required>
+
+        <label for="descripcion">Descripcion:(Breve)</label>
+        <input type="tel" id="telefono" name="telefono" required>
+
+        <label for="año">Año que se dio a conocer:</label>
+        <input type="text" id="contrasena" name="contrasena" required>
+
+        <label for="planetas">Planeta:</label>
+        <select id="planetas" name="planetas">
+            <option value="Jupiter">Jupiter</option>
+            <option value="Saturno">Saturno</option>
+            <option value="Neptuno">Neptuno</option>
+            <option value="Marte">Marte</option>
+            <option value="Venus">Venus</option>
+        </select>
+        <ul id="heroList"></ul>
+        <!-- Mensaje -->
+        <div id="mensaje"></div>
+        <button onclick = addHero()>Agregar</button>
+    </form>
+    <!-- JavaScript -->
+    <script>
+        // URL de la API
+        const apiUrl = "http://127.0.0.1:8000/api/Hero";
+
+        // Elementos HTML
+        const heroForm = document.getElementById("Heroes");
+        const heroNameInput = document.getElementById("nombre");
+        const heroName = document.getElementById("nombrereal");
+        const animacion = document.getElementById("animacion");
+        const descripcion = document.getElementById("descripcion");
+        const año = document.getElementById("año");
+        const planetas = document.getElementById("planetas");
+        const heroList = document.getElementById("heroList");
+
+        // agregar un nuevo héroe
+        function addHero() {
+            // Crear un nuevo héroe
+            const newHero = {
+                name: heroNameInput,
+                nombrereal: heroName,
+                animacion: animacion,
+                descripcion: descripcion,
+                año: año,
+                planetas: planetas
+            };
+
+            //solicitud POST a la API para agregar el héroe
+            fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authenticated": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMjgyMTEyLCJleHAiOjE3MDEyODU3MTIsIm5iZiI6MTcwMTI4MjExMiwianRpIjoieU9sSms1SXBta20xN2lVdCIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.r20KjMW-SIfPgIscn-ZGO-Hiv2psenbtMB-ywgH3Trk"
+                },  
+                body: JSON.stringify(newHero)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Agregar el héroe 
+                    displayHero(id);
+                    // Limpiar formulario
+                    heroNameInput.value = "";
+                })
+                .catch(error => {
+                    console.error("Error al agregar el héroe:", error);
+                });
+        }
+
+        // mostrar un héroe en la lista
+        function displayHero(hero) {
+            const li = document.createElement("li");
+            li.textContent = hero.name;
+
+            // eliminar el héroe
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Eliminar";
+            deleteButton.addEventListener("click", () => deleteHero(hero.id));
+
+            li.appendChild(deleteButton);
+            heroList.appendChild(li);
+        }
+
+        // eliminar un héroe pt2
+        function deleteHero(heroId) {
+            //solicitud DELETE a la API para eliminar el héroe
+            fetch(`${eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMjgyMTEyLCJleHAiOjE3MDEyODU3MTIsIm5iZiI6MTcwMTI4MjExMiwianRpIjoieU9sSms1SXBta20xN2lVdCIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.r20KjMW-SIfPgIscn-ZGO-Hiv2psenbtMB-ywgH3Trk}/${heroId}`, {
+                method: "DELETE"
+            })
+                .then(() => {
+                    // Eliminar el héroe de la lista
+                    const heroElement = document.querySelector(`li[data-id="${heroId}"]`);
+                    if (heroElement) {
+                        heroList.removeChild(heroElement);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al eliminar el héroe:", error);
+                });
+        }
+
+        //  obtener y mostrar la lista de héroes al cargar la página
+        function loadHeroes() {
+            //  solicitud GET a la API para obtener la lista de héroes
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(heroes => {
+                    // Mostrar cada héroe en la lista
+                    heroes.forEach(hero => displayHero(hero));
+                })
+                .catch(error => {
+                    console.error("Error al cargar la lista de héroes:", error);
+                });
+        }
+
+        // Cargar la lista de héroes al cargar la página
+        loadHeroes();
+
+    </script>
+</body>
+
+</html>
