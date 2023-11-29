@@ -42,15 +42,17 @@
             <option value="Marte">Marte</option>
             <option value="Venus">Venus</option>
         </select>
-        <ul id="heroList"></ul>
         <!-- Mensaje -->
         <div id="mensaje"></div>
-        <button onclick = addHero()>Agregar</button>
+        <button id="addHero">Agregar</button>
     </form>
+    <ul id="heroList">
+        <li class="item"></li>
+    </ul>
     <!-- JavaScript -->
     <script>
         // URL de la API
-        const apiUrl = "http://127.0.0.1:8000/api/Hero";
+        const apiUrl = "http://127.0.0.1:8000";
 
         // Elementos HTML
         const heroForm = document.getElementById("Heroes");
@@ -60,7 +62,7 @@
         const descripcion = document.getElementById("descripcion");
         const año = document.getElementById("año");
         const planetas = document.getElementById("planetas");
-        const heroList = document.getElementById("heroList");
+        // const heroList = document.getElementById("heroList");
 
         // agregar un nuevo héroe
         function addHero() {
@@ -75,44 +77,50 @@
             };
 
             //solicitud POST a la API para agregar el héroe
-            fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authenticated": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMjgyMTEyLCJleHAiOjE3MDEyODU3MTIsIm5iZiI6MTcwMTI4MjExMiwianRpIjoieU9sSms1SXBta20xN2lVdCIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.r20KjMW-SIfPgIscn-ZGO-Hiv2psenbtMB-ywgH3Trk"
-                },  
-                body: JSON.stringify(newHero)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // Agregar el héroe 
-                    displayHero(id);
-                    // Limpiar formulario
-                    heroNameInput.value = "";
-                })
-                .catch(error => {
-                    console.error("Error al agregar el héroe:", error);
-                });
+            function obtenerDatosDeAPI() {
+                fetch(apiUrl,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authenticated": "bearereyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMjgyMTEyLCJleHAiOjE3MDEyODU3MTIsIm5iZiI6MTcwMTI4MjExMiwianRpIjoieU9sSms1SXBta20xN2lVdCIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.r20KjMW-SIfPgIscn-ZGO-Hiv2psenbtMB-ywgH3Trk"
+                        },
+                        body: JSON.stringify(newHero)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Agregar el héroe 
+                        displayHero(id);
+                        // Limpiar formulario
+                        heroNameInput.value = "";
+                    })
+                    .catch(error => {
+                        console.error("Error al agregar el héroe:", error);
+                    });
+            }
         }
 
         // mostrar un héroe en la lista
-        function displayHero(hero) {
-            const li = document.createElement("li");
-            li.textContent = hero.name;
+        function renderData(data) {
+            const dataList = document.getElementById('heroList');
+            data.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = item.nombre;
+                dataList.appendChild(listItem);
 
-            // eliminar el héroe
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Eliminar";
-            deleteButton.addEventListener("click", () => deleteHero(hero.id));
+                // eliminar el héroe
+                // const deleteButton = document.createElement("button");
+                // deleteButton.textContent = "Eliminar";
+                // deleteButton.addEventListener("click", () => deleteHero(hero.id));
 
-            li.appendChild(deleteButton);
-            heroList.appendChild(li);
+                // li.appendChild(deleteButton);
+                // heroList.appendChild(li);
+            });
         }
-
         // eliminar un héroe pt2
         function deleteHero(heroId) {
             //solicitud DELETE a la API para eliminar el héroe
-            fetch(`${eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMjgyMTEyLCJleHAiOjE3MDEyODU3MTIsIm5iZiI6MTcwMTI4MjExMiwianRpIjoieU9sSms1SXBta20xN2lVdCIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.r20KjMW-SIfPgIscn-ZGO-Hiv2psenbtMB-ywgH3Trk}/${heroId}`, {
+            fetch(`${eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMjgyMTEyLCJleHAiOjE3MDEyODU3MTIsIm5iZiI6MTcwMTI4MjExMiwianRpIjoieU9sSms1SXBta20xN2lVdCIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.r20KjMW - SIfPgIscn - ZGO - Hiv2psenbtMB - ywgH3Trk}/${heroId}`, {
                 method: "DELETE"
             })
                 .then(() => {
@@ -142,8 +150,11 @@
         }
 
         // Cargar la lista de héroes al cargar la página
-        loadHeroes();
-
+        // loadHeroes();
+        window.onload = async () => {
+            const data = await obtenerDatosDeAPI();
+            renderData(data);
+        }
     </script>
 </body>
 
