@@ -52,7 +52,7 @@
     <!-- JavaScript -->
     <script>
         // URL de la API
-        const apiUrl = "http://127.0.0.1:8000";
+        const apiUrl = "http://127.0.0.1:8000/api/Hero";
 
         // Elementos HTML
         const heroForm = document.getElementById("Heroes");
@@ -83,7 +83,7 @@
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            "Authenticated": "bearereyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMjgyMTEyLCJleHAiOjE3MDEyODU3MTIsIm5iZiI6MTcwMTI4MjExMiwianRpIjoieU9sSms1SXBta20xN2lVdCIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.r20KjMW-SIfPgIscn-ZGO-Hiv2psenbtMB-ywgH3Trk"
+                            "Authenticated": "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMzU1NDI4LCJleHAiOjE3MDEzNTkwMjgsIm5iZiI6MTcwMTM1NTQyOCwianRpIjoibVBnSDdaSExzUXBvNUpWUCIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.E-6IM_G5hi9R0G6GbgARdrcxO4kOMfaAA5xYcMlvjw8"
                         },
                         body: JSON.stringify(newHero)
                     })
