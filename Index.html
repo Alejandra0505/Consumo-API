@@ -47,7 +47,7 @@
         <button id="addHero">Agregar</button>
     </form>
     <ul id="heroList">
-        <li class="item"></li>
+        <li class="listItem"></li>
     </ul>
     <!-- JavaScript -->
     <script>
@@ -64,9 +64,8 @@
         const planetas = document.getElementById("planetas");
         // const heroList = document.getElementById("heroList");
 
-        // agregar un nuevo héroe
+        // agregar y crear un nuevo héroe
         function addHero() {
-            // Crear un nuevo héroe
             const newHero = {
                 name: heroNameInput,
                 nombrereal: heroName,
@@ -80,17 +79,18 @@
             function obtenerDatosDeAPI() {
                 fetch(apiUrl,
                     {
-                        method: "POST",
+                        method: "GET",
                         headers: {
+                            "Accept": "application / json",
                             "Content-Type": "application/json",
-                            "Authenticated": "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMzU1NDI4LCJleHAiOjE3MDEzNTkwMjgsIm5iZiI6MTcwMTM1NTQyOCwianRpIjoibVBnSDdaSExzUXBvNUpWUCIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.E-6IM_G5hi9R0G6GbgARdrcxO4kOMfaAA5xYcMlvjw8"
+                            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMzYxNTA4LCJleHAiOjE3MDEzNjUxMDgsIm5iZiI6MTcwMTM2MTUwOCwianRpIjoiS1NneFAxT2RyZ2NZR3pXMCIsInN1YiI6IjQiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.Ws0fiDDHaGyp7OdaOHJqL3Bnbpaqpuo9v1ecqgWHyHQ"
                         },
                         body: JSON.stringify(newHero)
                     })
                     .then(response => response.json())
                     .then(data => {
                         // Agregar el héroe 
-                        displayHero(id);
+                        displayHero();
                         // Limpiar formulario
                         heroNameInput.value = "";
                     })
@@ -120,7 +120,7 @@
         // eliminar un héroe pt2
         function deleteHero(heroId) {
             //solicitud DELETE a la API para eliminar el héroe
-            fetch(`${eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzAxMjgyMTEyLCJleHAiOjE3MDEyODU3MTIsIm5iZiI6MTcwMTI4MjExMiwianRpIjoieU9sSms1SXBta20xN2lVdCIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.r20KjMW - SIfPgIscn - ZGO - Hiv2psenbtMB - ywgH3Trk}/${heroId}`, {
+            fetch(`${apiUrl}/${heroId}`, {
                 method: "DELETE"
             })
                 .then(() => {
@@ -141,7 +141,6 @@
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(heroes => {
-                    // Mostrar cada héroe en la lista
                     heroes.forEach(hero => displayHero(hero));
                 })
                 .catch(error => {
@@ -150,11 +149,11 @@
         }
 
         // Cargar la lista de héroes al cargar la página
-        // loadHeroes();
-        window.onload = async () => {
-            const data = await obtenerDatosDeAPI();
-            renderData(data);
-        }
+        loadHeroes();
+        // window.onload = async () => {
+        //     const data = await obtenerDatosDeAPI();
+        //     renderData(data);
+        // }
     </script>
 </body>
 
